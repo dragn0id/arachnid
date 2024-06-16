@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "ARACHNID",
+  "version": "0.0.1",
+  "description": "Scrape the web with ARACHNID!",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": ["scripting"],
+  "host_permissions": ["http://*/*", "https://*/*"]
+}
