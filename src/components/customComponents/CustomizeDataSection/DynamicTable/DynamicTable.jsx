@@ -83,62 +83,62 @@ export default function DynamicTable() {
             {Object.keys(data[0]).map((key, index) => (
               <th
                 key={index}
-                className={`px-4 py-2 text-left font-normal text-white min-w-32 max-w-fit ${
+                className={`px-4 py-2 font-normal text-white min-w-32 max-w-fit ${
                   index < Object.keys(data[0]).length - 1
                     ? "border-r border-gray-300"
                     : ""
                 }`}
               >
-                {editingColumn === index ? (
-                  <div className="flex items-center">
-                    <input
-                      type="text"
-                      className=" bg-gray-900 rounded-2xl pl-3 text-white min-w-6 max-w-15 w-full
-                      focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                      defaultValue={key}
-                      onBlur={(e) => {
-                        const oldColumnName = key; // Get the old column name using the key
-                        const newColumnName = e.target.value;
-                        handleSaveColumnName(oldColumnName, newColumnName);
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
+                <div className="flex flex-col items-center">
+                  <div className="flex items-center gap-2 mb-2">
+                    <button
+                      size="icon"
+                      onClick={() => handleRenameColumn(index)}
+                    >
+                      <RenameIcon className="w-5 h-5 mr-2" />
+                    </button>
+                    <button
+                      className="text-red-500 dark:text-red-400"
+                      size="icon"
+                      onClick={() => handleDeleteColumn(index)}
+                    >
+                      <TrashIcon className="w-5 h-5" />
+                    </button>
+                  </div>
+                  {editingColumn === index ? (
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        className=" bg-gray-900 rounded-2xl pl-3 text-white min-w-15 w-full
+                  focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        defaultValue={key}
+                        onBlur={(e) => {
                           const oldColumnName = key; // Get the old column name using the key
                           const newColumnName = e.target.value;
                           handleSaveColumnName(oldColumnName, newColumnName);
-                          e.preventDefault(); // Prevent the default action to keep focus
-                          setEditingColumn(null); // Exit editing mode
-                        }
-                      }}
-                    />
-                    <button
-                      className=""
-                      size="icon"
-                      onClick={() => setEditingColumn(null)}
-                    >
-                      <XIcon className="w-5 h-5" />
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-between">
-                    {key}
-                    <div className="flex items-center gap-2">
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            const oldColumnName = key; // Get the old column name using the key
+                            const newColumnName = e.target.value;
+                            handleSaveColumnName(oldColumnName, newColumnName);
+                            e.preventDefault(); // Prevent the default action to keep focus
+                            setEditingColumn(null); // Exit editing mode
+                          }
+                        }}
+                      />
                       <button
+                        className=""
                         size="icon"
-                        onClick={() => handleRenameColumn(index)}
+                        onClick={() => setEditingColumn(null)}
                       >
-                        <RenameIcon className="w-5 h-5 ml-2" />
-                      </button>
-                      <button
-                        className="text-red-500 dark:text-red-400"
-                        size="icon"
-                        onClick={() => handleDeleteColumn(index)}
-                      >
-                        <TrashIcon className="w-5 h-5" />
+                        <XIcon className="w-5 h-5" />
                       </button>
                     </div>
-                  </div>
-                )}
+                  ) : (
+                    <div className="text-center w-full min-w-15">{key}</div>
+                  )}
+                </div>
               </th>
             ))}
           </tr>
@@ -179,6 +179,10 @@ export default function DynamicTable() {
                       ? "border-r border-gray-300"
                       : ""
                   }`}
+                  style={{
+                    maxWidth: "180px",
+                    minWidth: "50px",
+                  }}
                 >
                   {/* Change the content based on the showAllRows state */}
                   {showAllRows ? (index === 0 ? "Show less" : "") : "..."}
