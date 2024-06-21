@@ -1,35 +1,63 @@
-import { UpArrowIcon } from "../../svgFunctions/AllSvgFunctions";
 import InspectElementLogo1 from "../../../assets/images/InspectElement1.svg";
 import { useState } from "react";
 import CheckBoxTick from "../CustomCheckBoxes/CheckBox1/CheckBoxTick/CheckBoxTick";
 import "./DynamicScrapingSection.css";
+import CheckBoxCross from "../CustomCheckBoxes/CheckBox1/CheckBoxCross/CheckBoxCross";
 
 export default function DynamicScrapingSection() {
   const [isUsingDynamicScraper, setIsUsingDynamicScraper] = useState(false);
-  const [showPaginationMore, setShowPaginationMore] = useState(true);
-  const [showLoadmoreMore, setShowLoadmoreMore] = useState(true);
+  const [showPaginationMore, setShowPaginationMore] = useState(false);
+  const [showLoadmoreMore, setShowLoadmoreMore] = useState(false);
 
   function handleIsUsingDynamicScraperClick(checked) {
     setIsUsingDynamicScraper(checked);
-    console.log("Checkbox is checked:", checked);
+    setShowPaginationMore(false);
+    setShowLoadmoreMore(false);
   }
 
-  function handleMorePaginationClick() {
-    setShowPaginationMore(!showPaginationMore);
+  function handleMorePaginationClick(checked) {
+    setShowPaginationMore(checked);
+    setShowLoadmoreMore(!checked);
   }
 
-  function handleMoreLoadmoreClick() {
-    setShowLoadmoreMore(!showLoadmoreMore);
+  function handleMoreLoadmoreClick(checked) {
+    setShowLoadmoreMore(checked);
+    setShowPaginationMore(!checked);
   }
 
   return (
     <>
-      <div className="border-y border-t-white border-b-slate-500 p-2 w-full flex justify-between items-center">
+      <div className="relative border-y border-t-white border-b-slate-500 p-2 w-full flex justify-between items-center">
         <h2 className="text-white text-base font-semibold ">
           DYNAMIC SCRAPING
         </h2>
         <div className="scale-50">
-          <CheckBoxTick onCheckboxChange={handleIsUsingDynamicScraperClick} />
+          <div
+            className={`absolute -top-6 right-2 transition-all ${
+              !isUsingDynamicScraper
+                ? ""
+                : showLoadmoreMore || showPaginationMore
+                ? "opacity-0"
+                : ""
+            } `}
+          >
+            <CheckBoxCross
+              id={"DynamicScraperCheckBox1"}
+              onCheckboxChange={handleIsUsingDynamicScraperClick}
+              checked={isUsingDynamicScraper}
+            />
+          </div>
+          <div
+            className={`absolute -top-6 right-2 transition-all ${
+              showLoadmoreMore || showPaginationMore ? "" : "opacity-0"
+            }`}
+          >
+            <CheckBoxTick
+              id={"DynamicScraperCheckBox2"}
+              onCheckboxChange={handleIsUsingDynamicScraperClick}
+              checked={isUsingDynamicScraper}
+            />
+          </div>
         </div>
       </div>
       <div
@@ -38,28 +66,17 @@ export default function DynamicScrapingSection() {
         } `}
       >
         <div className="space-y-4">
-          <div className="flex justify-between">
-            <div className="flex items-center space-x-4">
-              <input
-                type="radio"
-                id="pagination"
-                name="options"
-                value="pagination"
-                className="w-8 h-8"
+          <div className="flex items-center space-x-4">
+            <div className="scale-50">
+              <CheckBoxTick
+                id={"MorePaginationCheckboxCrossed"}
+                onCheckboxChange={handleMorePaginationClick}
+                checked={showPaginationMore}
               />
-              <label htmlFor="pagination" className="text-sm">
-                Pagination
-              </label>
             </div>
-            <button
-              size="icon"
-              className={`${
-                showPaginationMore ? "" : "rotate-180"
-              } transition-transform`}
-              onClick={handleMorePaginationClick}
-            >
-              <UpArrowIcon />
-            </button>
+            <label htmlFor="pagination" className="text-sm">
+              Pagination
+            </label>
           </div>
           <div
             className={`space-y-4 slide-transition ${
@@ -81,27 +98,17 @@ export default function DynamicScrapingSection() {
           </div>
         </div>
         <div className="space-y-4">
-          <div className="flex justify-between">
-            <div className="flex items-center space-x-4">
-              <input
-                type="radio"
-                id="loadMore"
-                name="options"
-                value="loadMore"
-                className="w-8 h-8"
+          <div className="flex items-center space-x-4">
+            <div className="scale-50">
+              <CheckBoxTick
+                id={"MoreLoadmoreCheckboxCrossed"}
+                onCheckboxChange={handleMoreLoadmoreClick}
+                checked={showLoadmoreMore}
               />
-              <label htmlFor="loadMore" className="text-sm">
-                Load More
-              </label>
             </div>
-            <button
-              className={`${
-                showLoadmoreMore ? "" : "rotate-180"
-              } transition-transform`}
-              onClick={handleMoreLoadmoreClick}
-            >
-              <UpArrowIcon />
-            </button>
+            <label htmlFor="loadMore" className="text-sm">
+              Load More
+            </label>
           </div>
           <div
             className={`space-y-4 slide-transition ${
