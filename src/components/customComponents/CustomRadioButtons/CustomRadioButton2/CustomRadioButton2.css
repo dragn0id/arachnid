@@ -1,0 +1,34 @@
+.radio-input2 .label2 input {
+  display: none;
+}
+
+.radio-input2 {
+  display: flex;
+  gap: 20px;
+}
+
+.radio-input2 .label2 {
+  display: flex;
+}
+
+.radio-input2 .label2 .check2 {
+  background: linear-gradient(180deg, #9b9b9b 100%, #504545 100%);
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: 0.3s;
+  border: 3px solid transparent;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5),
+    -1px -1px 4px rgba(255, 255, 255, 0.5);
+}
+
+.radio-input2 .label2 input:checked + .check2 {
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5),
+    -1px -1px 4px rgba(255, 255, 255, 0.5), inset 3px 3px 6px rgba(0, 0, 0, 0.5),
+    inset -1px -1px 4px rgba(255, 255, 255, 0.5);
+  transform: scale(1.1);
+}

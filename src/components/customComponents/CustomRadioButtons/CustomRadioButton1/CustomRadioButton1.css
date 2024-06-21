@@ -1,0 +1,71 @@
+.input1 {
+  -webkit-appearance: none;
+  /* remove default */
+  margin: 16px;
+  width: 24px;
+  height: 24px;
+  scale: 1.7;
+  border-radius: 12px;
+  cursor: pointer;
+  vertical-align: middle;
+  box-shadow: hsla(0, 0%, 100%, 0.15) 0 1px 1px,
+    inset hsla(0, 0%, 0%, 0.5) 0 0 0 1px;
+  background-color: hsla(0, 0%, 0%, 0.2);
+  background-repeat: no-repeat;
+  -webkit-transition: background-position 0.15s cubic-bezier(0.8, 0, 1, 1),
+    -webkit-transform 0.25s cubic-bezier(0.8, 0, 1, 1);
+  outline: none;
+}
+
+.input1.green {
+  background-image: -webkit-radial-gradient(
+    hsla(118, 100%, 90%, 1) 0%,
+    hsla(118, 100%, 70%, 1) 15%,
+    hsla(118, 100%, 60%, 0.3) 28%,
+    hsla(118, 100%, 30%, 0) 70%
+  );
+}
+
+.input1.yellow {
+  background-image: -webkit-radial-gradient(
+    hsla(50, 100%, 90%, 1) 0%,
+    hsla(50, 100%, 70%, 1) 15%,
+    hsla(50, 100%, 60%, 0.3) 28%,
+    hsla(50, 100%, 30%, 0) 70%
+  );
+}
+
+.input1.red {
+  background-image: -webkit-radial-gradient(
+    hsla(0, 100%, 90%, 1) 0%,
+    hsla(0, 100%, 70%, 1) 15%,
+    hsla(0, 100%, 60%, 0.3) 28%,
+    hsla(0, 100%, 30%, 0) 70%
+  );
+}
+
+.input1:checked {
+  -webkit-transition: background-position 0.2s 0.15s cubic-bezier(0, 0, 0.2, 1),
+    -webkit-transform 0.25s cubic-bezier(0, 0, 0.2, 1);
+}
+
+.input1:active {
+  -webkit-transform: scale(1.5);
+  -webkit-transition: -webkit-transform 0.1s cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* The up/down direction logic */
+
+.input1,
+.input1:active {
+  background-position: 24px 0;
+}
+
+.input1:checked {
+  background-position: 0 0;
+}
+
+.input1:checked ~ .input1,
+.input1:checked ~ .input1:active {
+  background-position: -24px 0;
+}
