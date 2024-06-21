@@ -1,6 +1,6 @@
 import { useState } from "react";
-import InspectElementLogo1 from "../../../assets/images/InspectElement1.svg";
-import { CancelIcon, ExportIcon } from "../../svgFunctions/AllSvgFunctions";
+import InspectElementLogo1 from "../../../../assets/images/InspectElement1.svg";
+import { CancelIcon, ExportIcon } from "../../../svgFunctions/AllSvgFunctions";
 
 export default function CustomGradientSelectTargetButton() {
   const [isSelected, setIsSelected] = useState(false);

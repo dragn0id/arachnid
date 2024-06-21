@@ -1,6 +1,5 @@
-import CustomGradientSelectTargetButton from "../CustomGradientSelectTargetButton/CustomGradientSelectTargetButton";
-
 import WebImage from "../../../assets/images/top-left-web-image.png";
+import CustomGradientSelectTargetButton from "./CustomGradientSelectTargetButton/CustomGradientSelectTargetButton";
 
 export default function ArachnidHeader() {
   return (

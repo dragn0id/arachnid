@@ -73,7 +73,8 @@ export default function DynamicTable() {
   };
 
   return (
-    <div className="overflow-x-auto p-4 rounded-md space-y-4">
+    <div className="overflow-x-auto p-4">
+      <h3 className="p-2">Preview Output</h3>
       <table
         className="w-full table-auto rounded-2xl"
         style={{ background: "rgba(255, 255, 255, 0.16)" }}
@@ -193,7 +194,7 @@ export default function DynamicTable() {
         </tbody>
       </table>
       <div className="mt-4 flex justify-end text-gray-400">
-        Total rows: {data.length}
+        {data.length} Rows
       </div>
     </div>
   );
