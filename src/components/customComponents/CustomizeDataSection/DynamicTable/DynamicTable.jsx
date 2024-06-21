@@ -241,7 +241,7 @@ export default function DynamicTable() {
                     minWidth: "50px",
                   }}
                 >
-                  {showAllRows ? (index === 0 ? "Show less" : "") : "..."}
+                  {showAllRows ? "Show less" : "..."}
                 </td>
               ))}
             </tr>
