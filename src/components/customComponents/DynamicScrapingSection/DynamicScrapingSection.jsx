@@ -52,6 +52,7 @@ export default function DynamicScrapingSection() {
               </label>
             </div>
             <button
+              size="icon"
               className={`${
                 showPaginationMore ? "" : "rotate-180"
               } transition-transform`}

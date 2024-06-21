@@ -58,9 +58,10 @@ function XIcon(props) {
   );
 }
 
-function ExportIcon() {
+function ExportIcon(props) {
   return (
     <svg
+      {...props}
       xmlns="http://www.w3.org/2000/svg"
       width="22"
       height="22"
@@ -86,9 +87,10 @@ function ExportIcon() {
   );
 }
 
-function CancelIcon() {
+function CancelIcon(props) {
   return (
     <svg
+      {...props}
       xmlns="http://www.w3.org/2000/svg"
       width="55"
       height="55"

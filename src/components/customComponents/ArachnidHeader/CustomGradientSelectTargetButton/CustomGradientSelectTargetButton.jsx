@@ -1,16 +1,18 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import InspectElementLogo1 from "../../../../assets/images/InspectElement1.svg";
 import { CancelIcon, ExportIcon } from "../../../svgFunctions/AllSvgFunctions";
+import { DataContext } from "../../../contexts/DataProvider";
 
 export default function CustomGradientSelectTargetButton() {
   const [isSelected, setIsSelected] = useState(false);
+  const { data } = useContext(DataContext);
 
   function handleTargetSelectClick() {
     setIsSelected(true);
   }
 
   function handleExportClick() {
-    console.log("Exporting data...");
+    console.log(data);
   }
 
   function handleCancelClick() {
