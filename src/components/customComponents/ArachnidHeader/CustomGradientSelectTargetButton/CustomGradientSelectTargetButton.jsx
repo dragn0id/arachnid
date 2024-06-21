@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import InspectElementLogo1 from "../../../../assets/images/InspectElement1.svg";
 import { CancelIcon, ExportIcon } from "../../../svgFunctions/AllSvgFunctions";
 import { DataContext } from "../../../contexts/DataProvider";
+import "./CustomGradientSelectTargetButton.css";
 
 export default function CustomGradientSelectTargetButton() {
   const [isSelected, setIsSelected] = useState(false);
@@ -25,7 +26,7 @@ export default function CustomGradientSelectTargetButton() {
         <>
           <button
             onClick={handleTargetSelectClick}
-            className="flex items-center justify-center rounded-[18px] custom-gradient w-52 h-16 transition-all duration-500"
+            className="flex items-center justify-center rounded-[18px] custom-gradient w-52 h-16 transition-all duration-100 transform hover:scale-105 active:scale-95"
             style={{
               background: "linear-gradient(81deg, #0400D7 0.28%, #3BCB98 100%)",
             }}
@@ -42,7 +43,7 @@ export default function CustomGradientSelectTargetButton() {
         <>
           <button
             onClick={handleExportClick}
-            className="flex items-center justify-center rounded-[18px] custom-gradient w-36 h-16 transition-all duration-500"
+            className="flex items-center justify-center rounded-[18px] custom-gradient w-36 h-16 transition-all duration-100 transform hover:scale-105 active:scale-95"
             style={{
               background: "linear-gradient(81deg, #0400D7 0.28%, #3BCB98 100%)",
             }}
@@ -55,7 +56,7 @@ export default function CustomGradientSelectTargetButton() {
             </span>
           </button>
           <button
-            className="transition-all duration-500"
+            className="transition-all duration-100 transform hover:scale-105 active:scale-95"
             onClick={handleCancelClick}
           >
             <CancelIcon />
