@@ -163,4 +163,30 @@ function RenameIcon(props) {
   );
 }
 
-export { PenIcon, TrashIcon, XIcon, ExportIcon, CancelIcon, RenameIcon };
+function UpArrowIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="28"
+      height="25"
+      viewBox="0 0 28 25"
+      fill="none"
+    >
+      <path
+        d="M7.12819 14.4647L14.0855 8.52771L21.0427 14.4647L19.4194 15.85L14.0855 11.2983L8.75156 15.85L7.12819 14.4647Z"
+        fill="white"
+      />
+    </svg>
+  );
+}
+
+export {
+  PenIcon,
+  TrashIcon,
+  XIcon,
+  ExportIcon,
+  CancelIcon,
+  RenameIcon,
+  UpArrowIcon,
+};
