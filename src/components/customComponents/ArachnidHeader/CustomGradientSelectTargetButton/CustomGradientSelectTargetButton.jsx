@@ -8,7 +8,26 @@ export default function CustomGradientSelectTargetButton() {
   const [isSelected, setIsSelected] = useState(false);
   const { data, outputFormatCsv, outputFormatJson } = useContext(DataContext);
 
-  function handleTargetSelectClick() {
+  async function handleTargetSelectClick() {
+    let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
+    // 'chrome://' tabs return undefined
+    if (tab.url === undefined) {
+      alert("Please select a valid tab");
+      return;
+    }
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      function: () => {
+        document.querySelectorAll("*").forEach(
+          (el) =>
+            (el.style.border = `2px dotted ${
+              "#" +
+              ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, "0") // Random color
+            }`)
+        );
+      },
+    });
     setIsSelected(true);
   }
 
