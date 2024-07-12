@@ -4,6 +4,9 @@ import { createContext, useState } from "react";
 const DataContext = createContext();
 
 const DataProvider = ({ children }) => {
+  const [outputFormatJson, setOutputFormatJson] = useState(false);
+  const [outputFormatCsv, setOutputFormatCsv] = useState(false);
+
   const [data, setData] = useState([
     {
       id: 1,
@@ -78,7 +81,16 @@ const DataProvider = ({ children }) => {
   ]);
 
   return (
-    <DataContext.Provider value={{ data, setData }}>
+    <DataContext.Provider
+      value={{
+        data,
+        setData,
+        outputFormatCsv,
+        outputFormatJson,
+        setOutputFormatCsv,
+        setOutputFormatJson,
+      }}
+    >
       {children}
     </DataContext.Provider>
   );
