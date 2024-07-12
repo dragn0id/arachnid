@@ -3,7 +3,8 @@ import InspectElementLogo1 from "../../../../assets/images/InspectElement1.svg";
 import { CancelIcon, ExportIcon } from "../../../svgFunctions/AllSvgFunctions";
 import { DataContext } from "../../../contexts/DataProvider";
 import "./CustomGradientSelectTargetButton.css";
-import { perturbNumericData } from "../../AnonymizationFunctions/AnonymizationFunctions";
+import { perturbNumericData } from "../../utils/AnonymizationFunctions";
+import scrapeData from "../../utils/ScrapeData";
 
 export default function CustomGradientSelectTargetButton() {
   const [isSelected, setIsSelected] = useState(false);
@@ -20,15 +21,7 @@ export default function CustomGradientSelectTargetButton() {
     }
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
-      function: () => {
-        document.querySelectorAll("*").forEach(
-          (el) =>
-            (el.style.border = `2px dotted ${
-              "#" +
-              ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, "0") // Random color
-            }`)
-        );
-      },
+      function: scrapeData,
     });
     setIsSelected(true);
     const perturbedData = perturbNumericData(data);
