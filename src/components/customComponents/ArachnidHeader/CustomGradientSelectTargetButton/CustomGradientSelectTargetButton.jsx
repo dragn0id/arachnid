@@ -3,12 +3,16 @@ import InspectElementLogo1 from "../../../../assets/images/InspectElement1.svg";
 import { CancelIcon, ExportIcon } from "../../../svgFunctions/AllSvgFunctions";
 import { DataContext } from "../../../contexts/DataProvider";
 import "./CustomGradientSelectTargetButton.css";
+import { perturbNumericData } from "../../AnonymizationFunctions/AnonymizationFunctions";
 
 export default function CustomGradientSelectTargetButton() {
   const [isSelected, setIsSelected] = useState(false);
-  const { data, outputFormatCsv, outputFormatJson } = useContext(DataContext);
+  const { data, setData, outputFormatCsv, outputFormatJson } =
+    useContext(DataContext);
 
   function handleTargetSelectClick() {
+    const perturbedData = perturbNumericData(data);
+    setData(perturbedData);
     setIsSelected(true);
   }
 
