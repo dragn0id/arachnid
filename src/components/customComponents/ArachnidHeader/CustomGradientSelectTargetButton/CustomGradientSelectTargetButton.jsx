@@ -6,14 +6,83 @@ import "./CustomGradientSelectTargetButton.css";
 
 export default function CustomGradientSelectTargetButton() {
   const [isSelected, setIsSelected] = useState(false);
-  const { data } = useContext(DataContext);
+  const { data, outputFormatCsv, outputFormatJson } = useContext(DataContext);
 
   function handleTargetSelectClick() {
     setIsSelected(true);
   }
 
+  function ExportAsJson() {
+    // Assuming `data` is your array of objects
+    const jsonData = JSON.stringify(data);
+    const blob = new Blob([jsonData], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    // Creating a temporary anchor element to trigger download
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "arachnid.json"; // Name of the file to be downloaded
+    document.body.appendChild(a); // Append the anchor to the document
+    a.click(); // Trigger a click on the anchor
+
+    // Clean up by removing the anchor and revoking the Blob URL
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function ExportAsCsv() {
+    // Assuming `data` is your array of objects and all objects have the same keys
+    if (data.length === 0) return; // Check if data is empty
+
+    // Extract column names (keys) from the first object
+    const columnNames = Object.keys(data[0]);
+    const csvHeader = columnNames.join(",") + "\n"; // Create the header row
+
+    // Convert each object to a CSV row
+    const csvRows = data
+      .map((item) =>
+        columnNames
+          .map((fieldName) => JSON.stringify(item[fieldName], replacer))
+          .join(",")
+      )
+      .join("\n"); // Join rows with newline character here
+
+    // Combine header and rows, and convert to Blob
+    const csvData = csvHeader + csvRows; // Directly concatenate header and rows
+    const blob = new Blob([csvData], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+
+    // Creating a temporary anchor element to trigger download
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "arachnid.csv"; // Name of the file to be downloaded
+    document.body.appendChild(a); // Append the anchor to the document
+    a.click(); // Trigger a click on the anchor
+
+    // Clean up by removing the anchor and revoking the Blob URL
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  // Custom replacer function for JSON.stringify to handle undefined values, etc.
+  function replacer(key, value) {
+    if (value === null) {
+      return "";
+    }
+    return value;
+  }
+
   function handleExportClick() {
-    console.log(data);
+    if (!outputFormatCsv && !outputFormatJson) {
+      alert("Please select an output format");
+      return;
+    }
+    if (outputFormatCsv) {
+      ExportAsCsv();
+    }
+    if (outputFormatJson) {
+      ExportAsJson();
+    }
   }
 
   function handleCancelClick() {

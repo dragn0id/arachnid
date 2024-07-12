@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import DynamicTable from "./DynamicTable/DynamicTable";
 import OutputFormatSelectionSection from "./OutputFormatSelectionSection/OutputFormatSelectionSection";
 

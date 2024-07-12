@@ -1,10 +1,16 @@
-import { useState } from "react";
+/* eslint-disable react/prop-types */
+import { useContext } from "react";
+import { DataContext } from "../../../contexts/DataProvider";
 import CheckBoxTick from "../../CustomCheckBoxes/CheckBox1/CheckBoxTick/CheckBoxTick";
 import "./OutputFormatSelectionSection.css";
 
 export default function OutputFormatSelectionSection() {
-  const [outputFormatJson, setOutputFormatJson] = useState(false);
-  const [outputFormatCsv, setOutputFormatCsv] = useState(false);
+  const {
+    outputFormatCsv,
+    outputFormatJson,
+    setOutputFormatCsv,
+    setOutputFormatJson,
+  } = useContext(DataContext);
 
   function handleOutputFormatJsonClick(checked) {
     setOutputFormatJson(checked);
