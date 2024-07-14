@@ -1,13 +1,21 @@
 import { useContext, useState } from "react";
 import InspectElementLogo1 from "../../../../assets/images/InspectElement1.svg";
-import { CancelIcon, ExportIcon } from "../../../svgFunctions/AllSvgFunctions";
+import {
+  CancelIcon,
+  ExportIcon,
+  FindingTargetIcon,
+  ScrapeDataIcon,
+} from "../../../svgFunctions/AllSvgFunctions";
 import { DataContext } from "../../../contexts/DataProvider";
 import "./CustomGradientSelectTargetButton.css";
 import { perturbNumericData } from "../../utils/AnonymizationFunctions";
 import scrapeData from "../../utils/ScrapeData";
 
 export default function CustomGradientSelectTargetButton() {
-  const [isSelected, setIsSelected] = useState(false);
+  const [isSelectInactive, setIsSelectInactive] = useState(true);
+  const [isSelectActive, setIsSelectActive] = useState(false);
+  const [isScraping, setIsScraping] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const { data, setData, outputFormatCsv, outputFormatJson } =
     useContext(DataContext);
 
@@ -23,9 +31,23 @@ export default function CustomGradientSelectTargetButton() {
       target: { tabId: tab.id },
       function: scrapeData,
     });
-    setIsSelected(true);
-    const perturbedData = perturbNumericData(data);
-    setData(perturbedData);
+    handleUserIsFindingTarget();
+  }
+
+  function handleUserIsFindingTarget() {
+    setIsSelectInactive(false);
+    setIsSelectActive(true);
+  }
+
+  function handleTargetCanBeScraped() {
+    setIsSelectActive(false);
+    setIsScraping(true);
+  }
+
+  function handleUserCanExport() {
+    handleperturbNumericData();
+    setIsScraping(false);
+    setIsExporting(true);
   }
 
   function ExportAsJson() {
@@ -88,6 +110,13 @@ export default function CustomGradientSelectTargetButton() {
     return value;
   }
 
+  function handleCancelClick() {
+    setIsScraping(false);
+    setIsExporting(false);
+    setIsSelectActive(false);
+    setIsSelectInactive(true);
+  }
+
   function handleExportClick() {
     if (!outputFormatCsv && !outputFormatJson) {
       alert("Please select an output format");
@@ -101,53 +130,109 @@ export default function CustomGradientSelectTargetButton() {
     }
   }
 
-  function handleCancelClick() {
-    setIsSelected(false);
+  function handleperturbNumericData() {
+    const perturbedData = perturbNumericData(data);
+    setData(perturbedData);
   }
+
+  const SelectTargetInactiveButton = (
+    <button
+      onClick={handleTargetSelectClick}
+      className="flex items-center justify-center rounded-[18px] custom-gradient w-52 h-16 transition-all duration-100 transform hover:scale-105 active:scale-95"
+      style={{
+        background: "linear-gradient(81deg, #0400D7 0.28%, #3BCB98 100%)",
+      }}
+    >
+      <span className="flex gap-3 justify-center items-center">
+        <img src={InspectElementLogo1} alt="InspectElementLogo1" />
+        <span className="text-white text-center font-poppins text-lg font-medium whitespace-nowrap">
+          Select Target
+        </span>
+      </span>
+    </button>
+  );
+
+  const SelectTargetActiveButton = (
+    <>
+      <button
+        onClick={handleTargetCanBeScraped}
+        className="flex items-center justify-center rounded-[18px] custom-gradient w-52 h-16 transition-all duration-100 transform hover:scale-105 active:scale-95"
+        style={{
+          background: "linear-gradient(81deg, #0400D7 0.28%, #3BCB98 100%)",
+        }}
+      >
+        <span className="flex gap-3 justify-center items-center">
+          <FindingTargetIcon className="w-10 h-10" />
+          <span className="text-white text-center font-poppins text-lg font-medium">
+            Finding Target
+          </span>
+        </span>
+      </button>
+      <button
+        className="transition-all duration-100 transform hover:scale-105 active:scale-95"
+        onClick={handleCancelClick}
+      >
+        <CancelIcon />
+      </button>
+    </>
+  );
+
+  const ScrapeDataButton = (
+    <>
+      <button
+        onClick={handleUserCanExport}
+        className="flex items-center justify-center rounded-[18px] custom-gradient w-52 h-16 transition-all duration-100 transform hover:scale-105 active:scale-95"
+        style={{
+          background: "linear-gradient(81deg, #0400D7 0.28%, #3BCB98 100%)",
+        }}
+      >
+        <span className="flex gap-3 justify-center items-center">
+          <ScrapeDataIcon className="w-10 h-10" />
+          <span className="text-white text-center font-poppins text-lg font-medium">
+            Scrape Data
+          </span>
+        </span>
+      </button>
+      <button
+        className="transition-all duration-100 transform hover:scale-105 active:scale-95"
+        onClick={handleCancelClick}
+      >
+        <CancelIcon />
+      </button>
+    </>
+  );
+
+  const ExportButton = (
+    <>
+      <button
+        onClick={handleExportClick}
+        className="flex items-center justify-center rounded-[18px] custom-gradient w-36 h-16 transition-all duration-100 transform hover:scale-105 active:scale-95"
+        style={{
+          background: "linear-gradient(81deg, #0400D7 0.28%, #3BCB98 100%)",
+        }}
+      >
+        <span className="flex gap-3 justify-center items-center">
+          <ExportIcon />
+          <span className="text-white text-center font-poppins text-lg font-medium">
+            Export
+          </span>
+        </span>
+      </button>
+      <button
+        className="transition-all duration-100 transform hover:scale-105 active:scale-95"
+        onClick={handleCancelClick}
+      >
+        <CancelIcon />
+      </button>
+    </>
+  );
 
   return (
     <>
-      {isSelected === false ? (
-        <>
-          <button
-            onClick={handleTargetSelectClick}
-            className="flex items-center justify-center rounded-[18px] custom-gradient w-52 h-16 transition-all duration-100 transform hover:scale-105 active:scale-95"
-            style={{
-              background: "linear-gradient(81deg, #0400D7 0.28%, #3BCB98 100%)",
-            }}
-          >
-            <span className="flex gap-3">
-              <img src={InspectElementLogo1} alt="InspectElementLogo1" />
-              <span className="text-white text-center font-poppins text-lg font-medium whitespace-nowrap">
-                Select Target
-              </span>
-            </span>
-          </button>
-        </>
-      ) : (
-        <>
-          <button
-            onClick={handleExportClick}
-            className="flex items-center justify-center rounded-[18px] custom-gradient w-36 h-16 transition-all duration-100 transform hover:scale-105 active:scale-95"
-            style={{
-              background: "linear-gradient(81deg, #0400D7 0.28%, #3BCB98 100%)",
-            }}
-          >
-            <span className="flex gap-3">
-              <ExportIcon />
-              <span className="text-white text-center font-poppins text-lg font-medium">
-                Export
-              </span>
-            </span>
-          </button>
-          <button
-            className="transition-all duration-100 transform hover:scale-105 active:scale-95"
-            onClick={handleCancelClick}
-          >
-            <CancelIcon />
-          </button>
-        </>
-      )}
+      {isSelectInactive && SelectTargetInactiveButton}
+      {isSelectActive && SelectTargetActiveButton}
+      {isScraping && ScrapeDataButton}
+      {isExporting && ExportButton}
     </>
   );
 }
