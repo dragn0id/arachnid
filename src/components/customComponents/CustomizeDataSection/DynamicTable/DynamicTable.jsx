@@ -3,10 +3,63 @@ import { useContext, useState } from "react";
 import { DataContext } from "../../../contexts/DataProvider";
 import {
   RenameIcon,
+  ThreeDotsIcon,
   TrashIcon,
   XIcon,
 } from "../../../svgFunctions/AllSvgFunctions";
 import "./DynamicTable.css";
+
+const Dropdown = ({ children, isOpen, setIsOpen, index }) => {
+  // const dropdownRef = useRef(null);
+
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+  //       setIsOpen(index, false);
+  //     }
+  //   };
+
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [setIsOpen, index]);
+
+  return (
+    <div
+      // ref={dropdownRef}
+      className="relative inline-block text-left"
+    >
+      <div>
+        <button
+          type="button"
+          className="inline-flex justify-center w-full rounded-md shadow-sm px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+          onClick={() => setIsOpen(index, !isOpen)}
+        >
+          <ThreeDotsIcon className="w-4 h-4" />
+        </button>
+      </div>
+
+      {isOpen && (
+        <div
+          style={{
+            background: "linear-gradient(180deg, #030303 0%, #1a0034 100%)",
+          }}
+          className="origin-top-right absolute right-0 mt-2 w-fit rounded-md shadow-lg ring-1 ring-black ring-opacity-5"
+        >
+          <div
+            className="py-1"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="options-menu"
+          >
+            {children}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default function DynamicTable() {
   const { data, setData } = useContext(DataContext);
@@ -14,6 +67,17 @@ export default function DynamicTable() {
   const [editingColumn, setEditingColumn] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [isOpenArray, setIsOpenArray] = useState(
+    Array(data[0].length).fill(false)
+  );
+
+  const setIsOpen = (index, state) => {
+    setIsOpenArray((prevState) => {
+      const newState = [...prevState];
+      newState[index] = state;
+      return newState;
+    });
+  };
 
   const handleShowMoreClick = () => {
     setShowAllRows(!showAllRows);
@@ -21,6 +85,7 @@ export default function DynamicTable() {
 
   const handleRenameColumn = (columnIndex) => {
     setEditingColumn(columnIndex);
+    setIsOpen(columnIndex, false);
   };
 
   const handleCloseAlert = () => {
@@ -28,14 +93,13 @@ export default function DynamicTable() {
   };
 
   const handleSaveColumnName = (oldColumnName, newColumnName) => {
+    // Early return if prevData is empty, column names are the same, or newColumnName already exists
     setData((prevData) => {
-      // Early return if prevData is empty, column names are the same, or newColumnName already exists
       if (!prevData.length || oldColumnName === newColumnName) return prevData;
 
       // Check if newColumnName already exists in the data
       const columnNames = Object.keys(prevData[0]);
       if (columnNames.includes(newColumnName)) {
-        // alert(`Column name "${newColumnName}" already exists.`);
         setAlertMessage(`Column name "${newColumnName}" already exists.`);
         setShowAlert(true);
         return prevData; // Abort the operation or handle as needed
@@ -66,6 +130,7 @@ export default function DynamicTable() {
       return newOrderData;
     });
   };
+
   const handleDeleteColumn = (columnIndex) => {
     setData((prevData) => {
       if (!prevData.length) return prevData; // Early return if prevData is empty
@@ -83,6 +148,7 @@ export default function DynamicTable() {
 
       return newData;
     });
+    setIsOpen(columnIndex, false);
   };
 
   return (
@@ -90,7 +156,7 @@ export default function DynamicTable() {
       {showAlert && (
         <div
           id="alert-SameColumnName"
-          className="flex items-center p-4 mb-4 text-red-400 rounded-lg bg-gray-800 "
+          className="flex items-center p-4 mb-4 text-red-400 rounded-lg bg-gray-800"
           role="alert"
         >
           <svg
@@ -153,20 +219,20 @@ export default function DynamicTable() {
                       <input
                         type="text"
                         className="bg-gray-900 rounded-2xl pl-3 text-white min-w-15 w-full
-                  focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                         defaultValue={key}
                         onBlur={(e) => {
-                          const oldColumnName = key; // Get the old column name using the key
+                          const oldColumnName = key;
                           const newColumnName = e.target.value;
                           handleSaveColumnName(oldColumnName, newColumnName);
                         }}
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
-                            const oldColumnName = key; // Get the old column name using the key
+                            const oldColumnName = key;
                             const newColumnName = e.target.value;
                             handleSaveColumnName(oldColumnName, newColumnName);
-                            e.preventDefault(); // Prevent the default action to keep focus
-                            setEditingColumn(null); // Exit editing mode
+                            e.preventDefault();
+                            setEditingColumn(null);
                           }
                         }}
                       />
@@ -183,21 +249,28 @@ export default function DynamicTable() {
                       <span className="custom-scrollbar rounded-md overflow-x-auto">
                         {key}
                       </span>
-                      <div className="flex items-center gap-2 ml-2">
+                      <Dropdown
+                        isOpen={isOpenArray[index]}
+                        setIsOpen={setIsOpen}
+                        index={index}
+                      >
                         <button
                           size="icon"
                           onClick={() => handleRenameColumn(index)}
+                          className="flex justify-center items-center gap-4 px-4 py-2 text-sm text-white hover:text-purple-100"
                         >
                           <RenameIcon className="w-5 h-5" />
+                          Rename
                         </button>
                         <button
-                          className="text-red-400 hover:text-red-700"
+                          className="flex justify-center items-center gap-4 text-red-400 hover:text-red-700 px-4 py-2 text-sm"
                           size="icon"
                           onClick={() => handleDeleteColumn(index)}
                         >
                           <TrashIcon className="w-5 h-5" />
+                          Delete
                         </button>
-                      </div>
+                      </Dropdown>
                     </div>
                   )}
                 </div>
@@ -230,7 +303,7 @@ export default function DynamicTable() {
             <tr onClick={handleShowMoreClick}>
               {Object.keys(data[0]).map((key, index) => (
                 <td
-                  key={index}
+                  key={key}
                   className={`px-4 py-2 text-center text-gray-400 cursor-pointer ${
                     index < Object.keys(data[0]).length - 1
                       ? "border-r border-gray-300"
