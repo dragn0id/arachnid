@@ -2,6 +2,7 @@
 import { useContext, useState } from "react";
 import { DataContext } from "../../../contexts/DataProvider";
 import {
+  NumberExtractorIcon,
   RenameIcon,
   ThreeDotsIcon,
   TrashIcon,
@@ -33,7 +34,7 @@ const Dropdown = ({ children, isOpen, setIsOpen, index }) => {
       <div>
         <button
           type="button"
-          className="inline-flex justify-center w-full rounded-md shadow-sm px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+          className="inline-flex justify-center w-full rounded-md shadow-sm px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-900"
           onClick={() => setIsOpen(index, !isOpen)}
         >
           <ThreeDotsIcon className="w-4 h-4" />
@@ -151,6 +152,36 @@ export default function DynamicTable() {
     setIsOpen(columnIndex, false);
   };
 
+  const extractNumbersAndReplaceFromColumn = (columnIndex) => {
+    setData((prevData) => {
+      // Check if prevData is empty
+      if (!prevData.length) return prevData;
+
+      // Get the keys (column names) from the first object, assuming all objects have the same structure
+      const keys = Object.keys(prevData[0]);
+      // Check if columnIndex is within bounds
+      if (columnIndex < 0 || columnIndex >= keys.length) return prevData;
+
+      // Identify the key (column name) to work with
+      const keyToModify = keys[columnIndex];
+      // Regular expression to match numbers
+      const numberPattern = /\d+/g;
+
+      // Map through each object in the array to replace the specified column's value with extracted numbers
+      const modifiedData = prevData.map((item) => {
+        // Ensure the value is a string before calling .match()
+        const itemValueAsString = String(item[keyToModify]);
+        const newValue =
+          itemValueAsString.match(numberPattern)?.join("") || item[keyToModify];
+        // Replace the original string with the extracted number, or keep the original if no number was found
+        return { ...item, [keyToModify]: newValue };
+      });
+
+      return modifiedData;
+    });
+    setIsOpen(columnIndex, false);
+  };
+
   return (
     <div className="overflow-x-auto p-4">
       {showAlert && (
@@ -198,129 +229,146 @@ export default function DynamicTable() {
         </div>
       )}
       <h3 className="p-2">Preview Output</h3>
-      <table
-        className="w-full table-auto rounded-2xl"
-        style={{ background: "rgba(255, 255, 255, 0.16)" }}
-      >
-        <thead>
-          <tr className="border-b border-gray-300">
-            {Object.keys(data[0]).map((key, index) => (
-              <th
-                key={index}
-                className={`px-4 py-2 font-normal text-white min-w-32 max-w-60 ${
-                  index < Object.keys(data[0]).length - 1
-                    ? "border-r border-gray-300"
-                    : ""
-                }`}
-              >
-                <div className="flex flex-col items-center">
-                  {editingColumn === index ? (
-                    <div className="flex items-center">
-                      <input
-                        type="text"
-                        className="bg-gray-900 rounded-2xl pl-3 text-white min-w-15 w-full
-                      focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                        defaultValue={key}
-                        onBlur={(e) => {
-                          const oldColumnName = key;
-                          const newColumnName = e.target.value;
-                          handleSaveColumnName(oldColumnName, newColumnName);
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            const oldColumnName = key;
-                            const newColumnName = e.target.value;
-                            handleSaveColumnName(oldColumnName, newColumnName);
-                            e.preventDefault();
-                            setEditingColumn(null);
-                          }
-                        }}
-                      />
-                      <button
-                        className="ml-2"
-                        size="icon"
-                        onClick={() => setEditingColumn(null)}
-                      >
-                        <XIcon className="w-5 h-5" />
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="text-center w-full min-w-15 flex items-center justify-between">
-                      <span className="custom-scrollbar rounded-md overflow-x-auto">
-                        {key}
-                      </span>
-                      <Dropdown
-                        isOpen={isOpenArray[index]}
-                        setIsOpen={setIsOpen}
-                        index={index}
-                      >
-                        <button
-                          size="icon"
-                          onClick={() => handleRenameColumn(index)}
-                          className="flex justify-center items-center gap-4 px-4 py-2 text-sm text-white hover:text-purple-100"
-                        >
-                          <RenameIcon className="w-5 h-5" />
-                          Rename
-                        </button>
-                        <button
-                          className="flex justify-center items-center gap-4 text-red-400 hover:text-red-700 px-4 py-2 text-sm"
-                          size="icon"
-                          onClick={() => handleDeleteColumn(index)}
-                        >
-                          <TrashIcon className="w-5 h-5" />
-                          Delete
-                        </button>
-                      </Dropdown>
-                    </div>
-                  )}
-                </div>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data.slice(0, showAllRows ? data.length : 5).map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {Object.values(row).map((value, columnIndex) => (
-                <td
-                  key={columnIndex}
-                  className={`custom-scrollbar px-4 py-2 text-gray-300 overflow-auto ${
-                    columnIndex < Object.keys(data[0]).length - 1
-                      ? "border-r border-gray-300"
-                      : ""
-                  }`}
-                  style={{
-                    maxWidth: "180px",
-                    minWidth: "50px",
-                  }}
-                >
-                  {value}
-                </td>
-              ))}
-            </tr>
-          ))}
-          {data.length > 5 && (
-            <tr onClick={handleShowMoreClick}>
+      <div className="overflow-auto p-4 [mask-image:linear-gradient(to_right,transparent,white_2%,white_96%,transparent)]">
+        <table
+          className="w-full table-auto rounded-2xl"
+          style={{ background: "rgba(255, 255, 255, 0.16)" }}
+        >
+          <thead>
+            <tr className="border-b border-gray-300">
               {Object.keys(data[0]).map((key, index) => (
-                <td
-                  key={key}
-                  className={`px-4 py-2 text-center text-gray-400 cursor-pointer ${
+                <th
+                  key={index}
+                  className={`px-4 py-2 font-normal text-white min-w-32 max-w-60 ${
                     index < Object.keys(data[0]).length - 1
                       ? "border-r border-gray-300"
                       : ""
                   }`}
-                  style={{
-                    maxWidth: "180px",
-                    minWidth: "50px",
-                  }}
                 >
-                  {showAllRows ? "Show less" : "..."}
-                </td>
+                  <div className="flex flex-col items-center">
+                    {editingColumn === index ? (
+                      <div className="flex items-center">
+                        <input
+                          type="text"
+                          className="bg-gray-900 rounded-2xl pl-3 text-white min-w-15 w-full
+                        focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          defaultValue={key}
+                          onBlur={(e) => {
+                            const oldColumnName = key;
+                            const newColumnName = e.target.value;
+                            handleSaveColumnName(oldColumnName, newColumnName);
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              const oldColumnName = key;
+                              const newColumnName = e.target.value;
+                              handleSaveColumnName(
+                                oldColumnName,
+                                newColumnName
+                              );
+                              e.preventDefault();
+                              setEditingColumn(null);
+                            }
+                          }}
+                        />
+                        <button
+                          className="ml-2"
+                          size="icon"
+                          onClick={() => setEditingColumn(null)}
+                        >
+                          <XIcon className="w-5 h-5" />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="text-center w-full min-w-15 flex items-center justify-between">
+                        <span className="custom-scrollbar rounded-md overflow-x-auto">
+                          {key}
+                        </span>
+                        <Dropdown
+                          isOpen={isOpenArray[index]}
+                          setIsOpen={setIsOpen}
+                          index={index}
+                        >
+                          <button
+                            size="icon"
+                            onClick={() => handleRenameColumn(index)}
+                            className="flex justify-center items-center gap-4 px-4 py-2 text-sm text-white hover:text-purple-100"
+                          >
+                            <RenameIcon className="w-5 h-5" />
+                            Rename
+                          </button>
+                          <button
+                            className="flex justify-center items-center gap-4 text-red-400 hover:text-red-700 px-4 py-2 text-sm"
+                            size="icon"
+                            onClick={() => handleDeleteColumn(index)}
+                          >
+                            <TrashIcon className="w-5 h-5" />
+                            Delete
+                          </button>
+                          <button
+                            className="flex justify-center items-center gap-4 text-green-400 hover:text-green-300 px-4 py-2 text-sm"
+                            size="icon"
+                            onClick={() =>
+                              extractNumbersAndReplaceFromColumn(index)
+                            }
+                          >
+                            <NumberExtractorIcon className="w-7 h-7" />
+                            Extract Numbers
+                          </button>
+                        </Dropdown>
+                      </div>
+                    )}
+                  </div>
+                </th>
               ))}
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {data
+              .slice(0, showAllRows ? data.length : 5)
+              .map((row, rowIndex) => (
+                <tr key={rowIndex}>
+                  {Object.values(row).map((value, columnIndex) => (
+                    <td
+                      key={columnIndex}
+                      className={`custom-scrollbar px-4 py-2 text-gray-300 overflow-auto ${
+                        columnIndex < Object.keys(data[0]).length - 1
+                          ? "border-r border-gray-300"
+                          : ""
+                      }`}
+                      style={{
+                        maxWidth: "180px",
+                        minWidth: "50px",
+                      }}
+                    >
+                      {value}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            {data.length > 5 && (
+              <tr onClick={handleShowMoreClick}>
+                {Object.keys(data[0]).map((key, index) => (
+                  <td
+                    key={key}
+                    className={`px-4 py-2 text-center text-gray-400 cursor-pointer ${
+                      index < Object.keys(data[0]).length - 1
+                        ? "border-r border-gray-300"
+                        : ""
+                    }`}
+                    style={{
+                      maxWidth: "180px",
+                      minWidth: "50px",
+                    }}
+                  >
+                    {showAllRows ? "Show less" : "..."}
+                  </td>
+                ))}
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
       <div className="mt-4 flex justify-end text-gray-400">
         {data.length} Rows
       </div>
