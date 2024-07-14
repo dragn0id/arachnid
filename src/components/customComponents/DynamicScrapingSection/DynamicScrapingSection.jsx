@@ -27,8 +27,18 @@ export default function DynamicScrapingSection() {
 
   return (
     <>
-      <div className="relative border-y border-t-white border-b-slate-500 p-2 w-full flex justify-between items-center">
-        <h2 className="text-white text-base font-semibold ">
+      <div
+        className={`relative transition-all p-2 w-full flex justify-between items-center ${
+          !isUsingDynamicScraper
+            ? "border-y border-t-slate-500 border-b-slate-800"
+            : "border-y border-t-white border-b-slate-500"
+        }`}
+      >
+        <h2
+          className={`text-white text-base font-semibold ${
+            !isUsingDynamicScraper ? "opacity-50" : ""
+          }`}
+        >
           DYNAMIC SCRAPING
         </h2>
         <div className="scale-50">
