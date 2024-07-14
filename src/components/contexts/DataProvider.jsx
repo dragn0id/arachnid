@@ -14,6 +14,7 @@ const DataProvider = ({ children }) => {
       email: "john@example.com",
       phone: "555-1234",
       salary: 50000,
+      price: "$ 505",
     },
     {
       id: 2,
@@ -21,6 +22,7 @@ const DataProvider = ({ children }) => {
       email: "jane@example.com",
       phone: "555-5678",
       salary: 52000,
+      price: "$ 505 rupees",
     },
     {
       id: 3,
@@ -28,6 +30,7 @@ const DataProvider = ({ children }) => {
       email: "bob@example.com",
       phone: "555-9012",
       salary: 50800,
+      price: "50 355wwf rupees35",
     },
     {
       id: 4,
@@ -35,6 +38,7 @@ const DataProvider = ({ children }) => {
       email: "sarah@example.com",
       phone: "555-3456",
       salary: 50500,
+      price: "5025 rupees2",
     },
     {
       id: 5,
@@ -42,6 +46,7 @@ const DataProvider = ({ children }) => {
       email: "tom@example.com",
       phone: "555-7890",
       salary: 54600,
+      price: "105 rupees",
     },
     {
       id: 6,
@@ -49,6 +54,7 @@ const DataProvider = ({ children }) => {
       email: "alice@example.com",
       phone: "555-2468",
       salary: 45000,
+      price: "56705 rupees",
     },
     {
       id: 7,
@@ -56,6 +62,7 @@ const DataProvider = ({ children }) => {
       email: "david@example.com",
       phone: "555-7890",
       salary: 5000,
+      price: "50435 rupees",
     },
     {
       id: 8,
@@ -63,6 +70,7 @@ const DataProvider = ({ children }) => {
       email: "emily@example.com",
       phone: "555-1357",
       salary: 8000,
+      price: "50235 rupees",
     },
     {
       id: 9,
@@ -70,6 +78,7 @@ const DataProvider = ({ children }) => {
       email: "michael@example.com",
       phone: "555-2468",
       salary: 30000,
+      price: "505 rupees",
     },
     {
       id: 10,
@@ -77,6 +86,7 @@ const DataProvider = ({ children }) => {
       email: "jessica@example.com",
       phone: "555-7890",
       salary: 50000,
+      price: "505 rupees",
     },
   ]);
 
