@@ -174,6 +174,10 @@ export default function DynamicTable() {
         const newValue =
           itemValueAsString.match(numberPattern)?.join("") || item[keyToModify];
         // Replace the original string with the extracted number, or keep the original if no number was found
+        // Convert the newvalue to a type number if it is a number
+        if (!isNaN(newValue)) {
+          return { ...item, [keyToModify]: Number(newValue) };
+        }
         return { ...item, [keyToModify]: newValue };
       });
 
