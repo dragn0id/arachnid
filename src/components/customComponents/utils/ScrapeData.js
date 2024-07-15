@@ -19,9 +19,15 @@ export default function scrapeData() {
             "candidate.parentNode.querySelectorAll(candidate.className)",
             candidate.parentNode.querySelectorAll("." + candidate.className)
           );
+          // Converts the class list into an array, prefixes each class with a dot, and joins them into a single string
+          // This ensures that elements with multiple classes are correctly matched
+          const classList = Array.from(candidate.classList)
+            .map((cls) => `.${cls}`)
+            .join("");
+
           // return all candidates that is the ancestor of the same class of the target element
           return candidate.parentNode.querySelectorAll(
-            `.${candidate.className}`
+            `${candidate.tagName}${classList}`
           );
         } else parentSet.add(candidate.parentNode);
       }
@@ -29,8 +35,10 @@ export default function scrapeData() {
     }
     let className = target.className;
     let tagName = target.tagName;
+
+    // Split the class names by space and joins them with dots to form a proper query selector
     let candidateElements = document.querySelectorAll(
-      className ? `${tagName}.${className}` : tagName
+      className ? `${tagName}.${className.split(" ").join(".")}` : tagName
     );
     return helper(new Set(candidateElements));
   }
