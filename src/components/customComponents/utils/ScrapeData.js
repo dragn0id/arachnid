@@ -15,20 +15,18 @@ export default function scrapeData() {
           parentSet.has(candidate.parentNode) &&
           candidate.parentNode.contains(target)
         ) {
-          console.log(
-            "candidate.parentNode.querySelectorAll(candidate.className)",
-            candidate.parentNode.querySelectorAll("." + candidate.className)
-          );
           // Converts the class list into an array, prefixes each class with a dot, and joins them into a single string
           // This ensures that elements with multiple classes are correctly matched
           const classList = Array.from(candidate.classList)
             .map((cls) => `.${cls}`)
             .join("");
 
+          const selector = classList
+            ? `${candidate.tagName}${classList}`
+            : candidate.tagName;
+
           // return all candidates that is the ancestor of the same class of the target element
-          return candidate.parentNode.querySelectorAll(
-            `${candidate.tagName}${classList}`
-          );
+          return candidate.parentNode.querySelectorAll(selector);
         } else parentSet.add(candidate.parentNode);
       }
       return helper(parentSet);
