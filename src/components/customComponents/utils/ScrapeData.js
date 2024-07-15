@@ -15,8 +15,7 @@ export default function scrapeData() {
           parentSet.has(candidate.parentNode) &&
           candidate.parentNode.contains(target)
         ) {
-          // Converts the class list into an array, prefixes each class with a dot, and joins them into a single string
-          // This ensures that elements with multiple classes are correctly matched
+          // handles elements with multiple classes are correctly matched
           const classList = Array.from(candidate.classList)
             .map((cls) => `.${cls}`)
             .join("");
@@ -45,7 +44,17 @@ export default function scrapeData() {
     return window.getComputedStyle(element).display === "block";
   }
 
-  let data = {};
+  function isBlockElementAccordingToGeniusesAtAmazon(element) {
+    // check if inline elements have block children for some reason (thanks amazon)
+    isBlock = false;
+    for (let child of element.childNodes) {
+      if (child.nodeType === 1 && isBlockElement(child)) {
+        isBlock = true;
+        break;
+      }
+    }
+    return isBlock;
+  }
 
   // gets the direct text under an element, and the text of it's inline children
   function getInsideText(element) {
@@ -61,6 +70,68 @@ export default function scrapeData() {
       }
     });
     return text;
+  }
+
+  // function getBlockChildren(element) {
+  //   let blockChildren = [];
+  //   element.childNodes.forEach((child) => {
+  //     if (child.nodeType === 1 && isBlockElement(child) && isBlockElementAccordingToGeniusesAtAmazon(child)) {
+  //       blockChildren.push(child);
+  //       console.log("block child", child);
+  //     } else {
+  //       console.log("not block child", child);
+  //     }
+  //   });
+  //   return blockChildren;
+  // }
+
+  function getDataFromSingleElement(element) {
+    // console.log(element);
+    // for a single element, add text of all inline children, recursively call for all block childre
+    let elementData = {};
+    if (element.src !== undefined) {
+      elementData[`src_${element.tagName}.${element.classList}`] = element.src;
+    }
+
+    if (element.href !== undefined && element.href !== "javascript:void(0)") {
+      elementData[`href_${element.tagName}.${element.classList}`] =
+        element.href;
+    }
+    if (element.childNodes.length === 0 && element.textContent.trim() !== "") {
+      let key = `${element.parentNode.tagName}.${element.parentNode.classList}`;
+      if (!elementData[key]) {
+        elementData[key] = "";
+      }
+      elementData[key] = element?.textContent;
+    } else {
+      element.childNodes.forEach((child) => {
+        elementData = { ...elementData, ...getDataFromSingleElement(child) };
+      });
+    }
+    return elementData;
+  }
+
+  function getDataFromElements(elements) {
+    // consolidate data from all elements, then ensure objects have the same keys
+    let data = [];
+    elements.forEach((element) => {
+      data.push(getDataFromSingleElement(element));
+    });
+
+    const allKeys = new Set();
+    data.forEach((obj) => {
+      Object.keys(obj).forEach((key) => allKeys.add(key));
+    });
+
+    return data.map((obj) => {
+      const newObj = { ...obj };
+      allKeys.forEach((key) => {
+        if (!(key in obj)) {
+          newObj[key] = null;
+        }
+      });
+      return newObj;
+    });
   }
 
   const pageHandleClick = (event) => {
@@ -81,7 +152,7 @@ export default function scrapeData() {
       element.style.border = "2px solid #0f0";
     });
 
-    console.log("elementArray", elementArray);
+    console.log(getDataFromElements(elementArray));
 
     // data = getDataFromIdArray(idArray);
 
@@ -92,7 +163,8 @@ export default function scrapeData() {
       el.removeEventListener("mouseout", pageHandleMouseOut);
       el.removeEventListener("click", pageHandleClick);
     });
-    event.target.style.border = "";
+    // fix issue where selected element not highlighted
+    // event.target.style.border = "";
   };
 
   const pageHandleMouseOut = (event) => {
@@ -106,11 +178,6 @@ export default function scrapeData() {
     }
     event.stopPropagation();
     event.target.style.border = "";
-    // document
-    //   .querySelectorAll(className ? `${tagName}.${className}` : tagName)
-    //   .forEach((el) => {
-    //     el.style.border = "";
-    //   });
   };
 
   const pageHandleMouseOver = (event) => {
