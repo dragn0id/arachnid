@@ -9,7 +9,8 @@ import {
 import { DataContext } from "../../../contexts/DataProvider";
 import "./CustomGradientSelectTargetButton.css";
 import { perturbNumericData } from "../../utils/AnonymizationFunctions";
-import scrapeData from "../../utils/ScrapeData";
+import selectData from "../../utils/selectData";
+import getDataFromElements from "../../utils/ScrapeData";
 
 export default function CustomGradientSelectTargetButton() {
   const [isSelectInactive, setIsSelectInactive] = useState(true);
@@ -20,6 +21,7 @@ export default function CustomGradientSelectTargetButton() {
     useContext(DataContext);
 
   async function handleTargetSelectClick() {
+    handleUserIsFindingTarget();
     let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
     // 'chrome://' tabs return undefined
@@ -29,9 +31,15 @@ export default function CustomGradientSelectTargetButton() {
     }
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
-      function: scrapeData,
+      function: selectData,
     });
-    handleUserIsFindingTarget();
+
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      console.log(message);
+      if (message.action === "elementSelected") {
+        handleTargetCanBeScraped();
+      }
+    });
   }
 
   function handleUserIsFindingTarget() {
@@ -44,8 +52,22 @@ export default function CustomGradientSelectTargetButton() {
     setIsScraping(true);
   }
 
-  function handleUserCanExport() {
-    handleperturbNumericData();
+  async function handleUserCanExport() {
+    console.log("in handleusercanexport");
+    let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      function: getDataFromElements,
+    });
+
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      if (message.action === "dataScraped") {
+        console.log("Data scraped successfully");
+        console.log(JSON.parse(message.data));
+        setData(JSON.parse(message.data));
+        // handleperturbNumericData(JSON.parse(message.data));
+      }
+    });
     setIsScraping(false);
     setIsExporting(true);
   }
@@ -130,9 +152,11 @@ export default function CustomGradientSelectTargetButton() {
     }
   }
 
-  function handleperturbNumericData() {
-    const perturbedData = perturbNumericData(data);
-    setData(perturbedData);
+  async function handleperturbNumericData(NewData) {
+    console.log("in handleperturbNumericData");
+    console.log("NewData:", NewData);
+    const perturbedData = perturbNumericData(NewData);
+    await setData(perturbedData);
   }
 
   const SelectTargetInactiveButton = (
@@ -155,7 +179,7 @@ export default function CustomGradientSelectTargetButton() {
   const SelectTargetActiveButton = (
     <>
       <button
-        onClick={handleTargetCanBeScraped}
+        // onClick={handleTargetCanBeScraped}
         className="flex items-center justify-center rounded-[18px] custom-gradient w-52 h-16 transition-all duration-100 transform hover:scale-105 active:scale-95"
         style={{
           background: "linear-gradient(81deg, #0400D7 0.28%, #3BCB98 100%)",
