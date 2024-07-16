@@ -332,22 +332,25 @@ export default function DynamicTable() {
               .slice(0, showAllRows ? data.length : 5)
               .map((row, rowIndex) => (
                 <tr key={rowIndex}>
-                  {Object.values(row).map((value, columnIndex) => (
-                    <td
-                      key={columnIndex}
-                      className={`custom-scrollbar px-4 py-2 text-gray-300 overflow-auto ${
-                        columnIndex < Object.keys(data[0]).length - 1
-                          ? "border-r border-gray-300"
-                          : ""
-                      }`}
-                      style={{
-                        maxWidth: "180px",
-                        minWidth: "50px",
-                      }}
-                    >
-                      {value}
-                    </td>
-                  ))}
+                  {Object.keys(data[0]).map((key, columnIndex) => {
+                    const value = row[key];
+                    return (
+                      <td
+                        key={columnIndex}
+                        className={`custom-scrollbar px-4 py-2 text-gray-300 overflow-auto ${
+                          columnIndex < Object.keys(data[0]).length - 1
+                            ? "border-r border-gray-300"
+                            : ""
+                        }`}
+                        style={{
+                          maxWidth: "180px",
+                          minWidth: "50px",
+                        }}
+                      >
+                        {value !== null ? value : ""}
+                      </td>
+                    );
+                  })}
                 </tr>
               ))}
             {data.length > 5 && (
@@ -365,7 +368,7 @@ export default function DynamicTable() {
                       minWidth: "50px",
                     }}
                   >
-                    {showAllRows ? "Show less" : "..."}
+                    {showAllRows ? "Show less" : "Show more"}
                   </td>
                 ))}
               </tr>
