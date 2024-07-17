@@ -3,16 +3,15 @@ import { useState, useContext, useEffect } from "react";
 import { DataContext } from "../../../contexts/DataProvider";
 import CheckBoxTick from "../../CustomCheckBoxes/CheckBox1/CheckBoxTick/CheckBoxTick";
 import {
+  CheckIcon,
   LeftArrowIcon,
   RightArrowIcon,
   SubmitIcon,
 } from "../../../svgFunctions/AllSvgFunctions";
 import DynamicGradientButton from "../../../Buttons/DynamicGradientButton";
 
-export default function SelectiveFilterScrapedDataDisplay({
-  setIsSelectivelyFiltering,
-}) {
-  const { data, setData } = useContext(DataContext);
+export default function SelectiveFilterScrapedDataDisplay() {
+  const { data, setData, setIsSelectivelyFiltering } = useContext(DataContext);
   const [checkedKeys, setCheckedKeys] = useState({});
   // Initialize currentIndexes for each key
   const [currentIndexes, setCurrentIndexes] = useState({});
@@ -75,6 +74,14 @@ export default function SelectiveFilterScrapedDataDisplay({
     setData(newData);
   }
 
+  function handleSelectAll() {
+    const allChecked = keys.reduce((acc, key) => {
+      acc[key] = true; // Mark each key as true (checked)
+      return acc;
+    }, {});
+    setCheckedKeys(allChecked);
+  }
+
   const keys = data.length > 0 ? Object.keys(data[0]) : [];
 
   return (
@@ -82,6 +89,18 @@ export default function SelectiveFilterScrapedDataDisplay({
       <div className="flex flex-col p-1 gap-y-4">
         <h3 className="p-2">Selectively Filter The Output</h3>
         <div className="p-[1px]">
+          <div className=" text-sm p-2">
+            <p>Select the data you want to keep in the final output.</p>
+            <p>Use the arrows to navigate through the data.</p>
+          </div>
+          <div className="flex items-center justify-center p-2">
+            <DynamicGradientButton
+              onClick={handleSelectAll}
+              icon={<CheckIcon className="w-5 h-5" />}
+            >
+              Select All
+            </DynamicGradientButton>
+          </div>
           {keys.map((key) => {
             return (
               <div key={key} className="flex items-center justify-between">
@@ -118,12 +137,14 @@ export default function SelectiveFilterScrapedDataDisplay({
             );
           })}
         </div>
-        <DynamicGradientButton
-          onClick={handleSelectiveFilteringDone}
-          icon={<SubmitIcon className="w-5 h-5" />}
-        >
-          Done
-        </DynamicGradientButton>
+        <div className="flex items-center justify-center">
+          <DynamicGradientButton
+            onClick={handleSelectiveFilteringDone}
+            icon={<SubmitIcon className="w-5 h-5" />}
+          >
+            Filter To Selected Data
+          </DynamicGradientButton>
+        </div>
       </div>
     </>
   );
