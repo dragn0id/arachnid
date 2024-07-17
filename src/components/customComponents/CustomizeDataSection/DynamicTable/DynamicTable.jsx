@@ -4,6 +4,7 @@ import { DataContext } from "../../../contexts/DataProvider";
 import {
   NumberExtractorIcon,
   RenameIcon,
+  ReplaceDataIcon,
   ThreeDotsIcon,
   TrashIcon,
   XIcon,
@@ -11,26 +12,8 @@ import {
 import "./DynamicTable.css";
 
 const Dropdown = ({ children, isOpen, setIsOpen, index }) => {
-  // const dropdownRef = useRef(null);
-
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-  //       setIsOpen(index, false);
-  //     }
-  //   };
-
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [setIsOpen, index]);
-
   return (
-    <div
-      // ref={dropdownRef}
-      className="relative inline-block text-left"
-    >
+    <div className="relative inline-block text-left">
       <div>
         <button
           type="button"
@@ -319,6 +302,16 @@ export default function DynamicTable() {
                             <NumberExtractorIcon className="w-7 h-7" />
                             Extract Numbers
                           </button>
+                          <button
+                            className="flex justify-center items-center gap-4 text-blue-400 hover:text-blue-300 px-4 py-2 text-sm"
+                            size="icon"
+                            onClick={() =>
+                              extractNumbersAndReplaceFromColumn(index)
+                            }
+                          >
+                            <ReplaceDataIcon className="w-7 h-7" />
+                            Replace Data
+                          </button>
                         </Dropdown>
                       </div>
                     )}
@@ -347,7 +340,7 @@ export default function DynamicTable() {
                           minWidth: "50px",
                         }}
                       >
-                        {value !== null ? value : ""}
+                        {value !== null ? value : "NA"}
                       </td>
                     );
                   })}
