@@ -35,3 +35,7 @@ body {
 ::-webkit-scrollbar:horizontal {
   height: 10px;
 }
+
+.custom-scrollbar::-webkit-scrollbar:horizontal {
+  height: 7px;
+}
