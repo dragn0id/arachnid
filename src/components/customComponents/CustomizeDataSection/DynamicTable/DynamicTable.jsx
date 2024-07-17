@@ -11,40 +11,6 @@ import {
 } from "../../../svgFunctions/AllSvgFunctions";
 import "./DynamicTable.css";
 
-const Dropdown = ({ children, isOpen, setIsOpen, index }) => {
-  return (
-    <div className="relative inline-block text-left">
-      <div>
-        <button
-          type="button"
-          className="inline-flex justify-center w-full rounded-md shadow-sm px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-900"
-          onClick={() => setIsOpen(index, !isOpen)}
-        >
-          <ThreeDotsIcon className="w-4 h-4" />
-        </button>
-      </div>
-
-      {isOpen && (
-        <div
-          style={{
-            background: "linear-gradient(180deg, #030303 0%, #1a0034 100%)",
-          }}
-          className="origin-top-right absolute right-0 mt-2 w-fit rounded-md shadow-lg ring-1 ring-black ring-opacity-5"
-        >
-          <div
-            className="py-1"
-            role="menu"
-            aria-orientation="vertical"
-            aria-labelledby="options-menu"
-          >
-            {children}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
 export default function DynamicTable() {
   const { data, setData } = useContext(DataContext);
   const [showAllRows, setShowAllRows] = useState(false);
@@ -110,7 +76,6 @@ export default function DynamicTable() {
         });
         return newRow;
       });
-
       return newOrderData;
     });
   };
@@ -375,3 +340,37 @@ export default function DynamicTable() {
     </div>
   );
 }
+
+const Dropdown = ({ children, isOpen, setIsOpen, index }) => {
+  return (
+    <div className="relative inline-block text-left">
+      <div>
+        <button
+          type="button"
+          className="inline-flex justify-center w-full rounded-md shadow-sm px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-900"
+          onClick={() => setIsOpen(index, !isOpen)}
+        >
+          <ThreeDotsIcon className="w-4 h-4" />
+        </button>
+      </div>
+
+      {isOpen && (
+        <div
+          style={{
+            background: "linear-gradient(180deg, #030303 0%, #1a0034 100%)",
+          }}
+          className="origin-top-right absolute right-0 mt-2 w-fit rounded-md shadow-lg ring-1 ring-black ring-opacity-5"
+        >
+          <div
+            className="py-1"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="options-menu"
+          >
+            {children}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};

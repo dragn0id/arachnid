@@ -10,9 +10,11 @@ export default function DynamicGradientButton({ onClick, icon, children }) {
     >
       <span className="flex gap-3 justify-center items-center">
         {icon}
-        <span className="text-white text-center font-poppins text-lg font-medium whitespace-nowrap">
-          {children}
-        </span>
+        {children && (
+          <span className="text-white text-center font-poppins text-lg font-medium whitespace-nowrap">
+            {children}
+          </span>
+        )}
       </span>
     </button>
   );

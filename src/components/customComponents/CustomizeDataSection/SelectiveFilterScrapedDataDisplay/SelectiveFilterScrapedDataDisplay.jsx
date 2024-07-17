@@ -22,7 +22,6 @@ export default function SelectiveFilterScrapedDataDisplay({
   );
 
   useEffect(() => {
-    // Step 2: Use useEffect to monitor changes in `data`
     setCurrentIndexes(
       data[0]
         ? Object.keys(data[0]).reduce((acc, key) => ({ ...acc, [key]: 0 }), {})
@@ -69,6 +68,7 @@ export default function SelectiveFilterScrapedDataDisplay({
 
   return (
     <>
+      <h3 className="p-2">Selectively Filter The Output</h3>
       {keys.map((key) => {
         // Debugging output
         console.log(
@@ -93,15 +93,11 @@ export default function SelectiveFilterScrapedDataDisplay({
             <DynamicGradientButton
               onClick={() => handleDataChange(key, "prev")}
               icon={<LeftArrowIcon className="w-5 h-5" />}
-            >
-              Previous {key}
-            </DynamicGradientButton>
+            ></DynamicGradientButton>
             <DynamicGradientButton
               onClick={() => handleDataChange(key, "next")}
               icon={<RightArrowIcon className="w-5 h-5" />}
-            >
-              Next {key}
-            </DynamicGradientButton>
+            ></DynamicGradientButton>
           </div>
         );
       })}
