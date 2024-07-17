@@ -9,7 +9,6 @@ import {
   TrashIcon,
   XIcon,
 } from "../../../svgFunctions/AllSvgFunctions";
-import "./DynamicTable.css";
 
 export default function DynamicTable() {
   const { data, setData } = useContext(DataContext);
@@ -233,7 +232,7 @@ export default function DynamicTable() {
                       </div>
                     ) : (
                       <div className="text-center w-full min-w-15 flex items-center justify-between">
-                        <span className="custom-scrollbar rounded-md overflow-x-auto">
+                        <span className="custom-scrollbar rounded-md overflow-x-auto whitespace-nowrap w-fit">
                           {key}
                         </span>
                         <Dropdown
@@ -295,7 +294,7 @@ export default function DynamicTable() {
                     return (
                       <td
                         key={columnIndex}
-                        className={`custom-scrollbar px-4 py-2 text-gray-300 overflow-auto ${
+                        className={`custom-scrollbar overflow-x-auto whitespace-nowrap w-fit px-4 py-2 text-gray-300 ${
                           columnIndex < Object.keys(data[0]).length - 1
                             ? "border-r border-gray-300"
                             : ""
