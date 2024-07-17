@@ -328,6 +328,95 @@ function ScrapeDataIcon(props) {
   );
 }
 
+function ReplaceDataIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M8.00098 1.33301C4.13398 1.33301 1.33398 4.13301 1.33398 8.00001C1.33398 11.867 4.13398 14.667 8.00098 14.667C11.867 14.667 14.667 11.867 14.667 8.00001C14.667 4.13301 11.867 1.33301 8.00098 1.33301Z" />
+      <path d="M8.00098 4.66701C8.00098 4.66701 8.00098 4.66701 8.00098 4.66701" />
+      <path d="M8.00098 11.333C8.00098 11.333 8.00098 11.333 8.00098 11.333" />
+      <path d="M4.66798 8.00001C4.66798 8.00001 4.66798 8.00001 4.66798 8.00001" />
+      <path d="M11.334 8.00001C11.334 8.00001 11.334 8.00001 11.334 8.00001" />
+      <path d="M8.00098 1.33301V4.66701" />
+      <path d="M8.00098 11.333V14.667" />
+      <path d="M4.66798 8.00001H1.33398" />
+      <path d="M14.667 8.00001H11.334" />
+      <path d="M4.66798 8.00001L11.334 8.00001" />
+      <path d="M8.00098 4.66701L8.00098 11.333" />
+    </svg>
+  );
+}
+
+function SubmitIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12.667 8.00001L8.00001 12.667L3.33301 8.00001" />
+      <path d="M8.00001 12.667V3.33301" />
+    </svg>
+  );
+}
+
+function RightArrowIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M2.667 8.00001H13.333" />
+      <path d="M8.00001 2.66701L13.333 8.00001L8.00001 13.333" />
+    </svg>
+  );
+}
+
+function LeftArrowIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M13.333 8.00001H2.667" />
+      <path d="M8.00001 13.333L2.667 8.00001L8.00001 2.66701" />
+    </svg>
+  );
+}
+
 export {
   PenIcon,
   TrashIcon,
@@ -340,4 +429,8 @@ export {
   NumberExtractorIcon,
   FindingTargetIcon,
   ScrapeDataIcon,
+  ReplaceDataIcon,
+  SubmitIcon,
+  RightArrowIcon,
+  LeftArrowIcon,
 };
