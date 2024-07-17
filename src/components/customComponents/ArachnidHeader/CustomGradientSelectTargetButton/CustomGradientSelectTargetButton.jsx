@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import InspectElementLogo1 from "../../../../assets/images/InspectElement1.svg";
 import {
   CancelIcon,
@@ -13,12 +13,17 @@ import selectData from "../../utils/selectData";
 import getDataFromElements from "../../utils/ScrapeData";
 
 export default function CustomGradientSelectTargetButton() {
-  const [isSelectInactive, setIsSelectInactive] = useState(true);
-  const [isSelectActive, setIsSelectActive] = useState(false);
-  const [isScraping, setIsScraping] = useState(false);
-  const [isExporting, setIsExporting] = useState(false);
-  const { data, setData, outputFormatCsv, outputFormatJson } =
-    useContext(DataContext);
+  const {
+    data,
+    setData,
+    outputFormatCsv,
+    outputFormatJson,
+    currentStatus,
+    setCurrentStatus,
+    setIsSelectivelyFiltering,
+    exportSectionRef,
+    setShowNoExportFormatAlert,
+  } = useContext(DataContext);
 
   async function handleTargetSelectClick() {
     handleUserIsFindingTarget();
@@ -43,13 +48,11 @@ export default function CustomGradientSelectTargetButton() {
   }
 
   function handleUserIsFindingTarget() {
-    setIsSelectInactive(false);
-    setIsSelectActive(true);
+    setCurrentStatus("FindingTarget");
   }
 
   function handleTargetCanBeScraped() {
-    setIsSelectActive(false);
-    setIsScraping(true);
+    setCurrentStatus("ReadyToScrape");
   }
 
   async function handleUserCanExport() {
@@ -68,8 +71,8 @@ export default function CustomGradientSelectTargetButton() {
         // handleperturbNumericData(JSON.parse(message.data));
       }
     });
-    setIsScraping(false);
-    setIsExporting(true);
+    setCurrentStatus("ReadyToExport");
+    setIsSelectivelyFiltering(true);
   }
 
   function ExportAsJson() {
@@ -133,15 +136,14 @@ export default function CustomGradientSelectTargetButton() {
   }
 
   function handleCancelClick() {
-    setIsScraping(false);
-    setIsExporting(false);
-    setIsSelectActive(false);
-    setIsSelectInactive(true);
+    setCurrentStatus("SelectTarget");
   }
 
   function handleExportClick() {
     if (!outputFormatCsv && !outputFormatJson) {
-      alert("Please select an output format");
+      setShowNoExportFormatAlert(true);
+      // Use scrollIntoView to scroll to the export section
+      exportSectionRef.current?.scrollIntoView({ behavior: "smooth" });
       return;
     }
     if (outputFormatCsv) {
@@ -253,10 +255,10 @@ export default function CustomGradientSelectTargetButton() {
 
   return (
     <>
-      {isSelectInactive && SelectTargetInactiveButton}
-      {isSelectActive && SelectTargetActiveButton}
-      {isScraping && ScrapeDataButton}
-      {isExporting && ExportButton}
+      {currentStatus === "SelectTarget" && SelectTargetInactiveButton}
+      {currentStatus === "FindingTarget" && SelectTargetActiveButton}
+      {currentStatus === "ReadyToScrape" && ScrapeDataButton}
+      {currentStatus === "ReadyToExport" && ExportButton}
     </>
   );
 }

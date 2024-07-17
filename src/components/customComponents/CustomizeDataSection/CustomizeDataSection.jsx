@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useContext } from "react";
 import DynamicTable from "./DynamicTable/DynamicTable";
 import OutputFormatSelectionSection from "./OutputFormatSelectionSection/OutputFormatSelectionSection";
 import SelectiveFilterScrapedDataDisplay from "./SelectiveFilterScrapedDataDisplay/SelectiveFilterScrapedDataDisplay";
+import { DataContext } from "../../contexts/DataProvider";
 
 export default function CustomizeDataSection() {
-  const [isSelectivelyFiltering, setIsSelectivelyFiltering] = useState(true);
+  const { isSelectivelyFiltering } = useContext(DataContext);
 
   return (
     <>
@@ -14,9 +15,7 @@ export default function CustomizeDataSection() {
           CUSTOMISE DATASET
         </h2>
         {isSelectivelyFiltering ? (
-          <SelectiveFilterScrapedDataDisplay
-            setIsSelectivelyFiltering={setIsSelectivelyFiltering}
-          />
+          <SelectiveFilterScrapedDataDisplay />
         ) : (
           <DynamicTable />
         )}
