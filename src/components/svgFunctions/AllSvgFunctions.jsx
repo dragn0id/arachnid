@@ -417,6 +417,25 @@ function LeftArrowIcon(props) {
   );
 }
 
+function CheckIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M1.333 8.00001L6.666 13.333L14.666 5.33301" />
+    </svg>
+  );
+}
+
 export {
   PenIcon,
   TrashIcon,
@@ -433,4 +452,5 @@ export {
   SubmitIcon,
   RightArrowIcon,
   LeftArrowIcon,
+  CheckIcon,
 };
