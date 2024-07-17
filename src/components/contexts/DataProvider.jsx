@@ -1,13 +1,18 @@
 /* eslint-disable react/prop-types */
-import { createContext, useState } from "react";
+import { createContext, useRef, useState } from "react";
 
 const DataContext = createContext();
 
 const DataProvider = ({ children }) => {
   const [outputFormatJson, setOutputFormatJson] = useState(false);
   const [outputFormatCsv, setOutputFormatCsv] = useState(false);
+  const [currentStatus, setCurrentStatus] = useState("SelectTarget");
+  const [isSelectivelyFiltering, setIsSelectivelyFiltering] = useState(true);
+  const exportSectionRef = useRef(null);
+  const [showNoExportFormatAlert, setShowNoExportFormatAlert] = useState(false);
 
   const [data, setData] = useState([
+    // Dummy data
     {
       id: 1,
       nameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee:
@@ -120,6 +125,13 @@ const DataProvider = ({ children }) => {
         outputFormatJson,
         setOutputFormatCsv,
         setOutputFormatJson,
+        currentStatus,
+        setCurrentStatus,
+        isSelectivelyFiltering,
+        setIsSelectivelyFiltering,
+        exportSectionRef,
+        showNoExportFormatAlert,
+        setShowNoExportFormatAlert,
       }}
     >
       {children}
