@@ -22,6 +22,7 @@ const DataProvider = ({ children }) => {
       salary: 50000,
       price: "$ 505",
       NoData: null,
+      discount: "27% off",
       SomeData: null,
     },
     {
@@ -32,6 +33,7 @@ const DataProvider = ({ children }) => {
       salary: 52000,
       price: "$ 505 rupees",
       NoData: null,
+      discount: "27% off",
       SomeData: null,
     },
     {
@@ -42,6 +44,7 @@ const DataProvider = ({ children }) => {
       salary: 50800,
       price: "50 355wwf rupees35",
       NoData: null,
+      discount: "27% off",
       SomeData: null,
     },
     {
@@ -52,6 +55,7 @@ const DataProvider = ({ children }) => {
       salary: 50500,
       price: "5025 rupees2",
       NoData: null,
+      discount: "27% off",
       SomeData: null,
     },
     {
@@ -62,6 +66,7 @@ const DataProvider = ({ children }) => {
       salary: 54600,
       price: "105 rupees",
       NoData: null,
+      discount: "27% off",
       SomeData: null,
     },
     {
@@ -72,6 +77,7 @@ const DataProvider = ({ children }) => {
       salary: 45000,
       price: "56705 rupees",
       NoData: null,
+      discount: "27% off",
       SomeData: "Some Data",
     },
     {
@@ -82,6 +88,7 @@ const DataProvider = ({ children }) => {
       salary: 5000,
       price: "50435 rupees",
       NoData: null,
+      discount: "27% off",
       SomeData: null,
     },
     {
@@ -92,6 +99,7 @@ const DataProvider = ({ children }) => {
       salary: 8000,
       price: "50235 rupees",
       NoData: null,
+      discount: "27% off",
       SomeData: "Some Data",
     },
     {
@@ -102,6 +110,7 @@ const DataProvider = ({ children }) => {
       salary: 30000,
       price: "505 rupees",
       NoData: null,
+      discount: "27% off",
       SomeData: null,
     },
     {
@@ -112,6 +121,7 @@ const DataProvider = ({ children }) => {
       salary: 50000,
       price: "505 rupees",
       NoData: null,
+      discount: "27% off",
       SomeData: null,
     },
   ]);
