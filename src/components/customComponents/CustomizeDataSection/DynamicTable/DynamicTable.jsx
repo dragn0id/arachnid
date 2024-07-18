@@ -9,16 +9,27 @@ import {
   TrashIcon,
   XIcon,
 } from "../../../svgFunctions/AllSvgFunctions";
+import Backdrop from "../../Modals/BackDrop";
 
 export default function DynamicTable() {
   const { data, setData } = useContext(DataContext);
   const [showAllRows, setShowAllRows] = useState(false);
   const [editingColumn, setEditingColumn] = useState(null);
+  const [replacingColumn, setReplacingColumn] = useState(null);
+  const [showReplaceModal, setShowReplaceModal] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [isOpenArray, setIsOpenArray] = useState(
     Array(data[0].length).fill(false)
   );
+
+  const handleReplaceNullsModal = () => {
+    setShowReplaceModal(true);
+  };
+  const handleReplaceNullsModalClose = () => {
+    setShowReplaceModal(false);
+    setReplacingColumn(null);
+  };
 
   const setIsOpen = (index, state) => {
     setIsOpenArray((prevState) => {
@@ -130,6 +141,23 @@ export default function DynamicTable() {
 
       return modifiedData;
     });
+    setIsOpen(columnIndex, false);
+  };
+
+  const handleReplaceNulls = (columnIndex, defaultValue) => {
+    setData((prevData) => {
+      if (!prevData.length) return prevData;
+      const keys = Object.keys(prevData[0]);
+      if (columnIndex < 0 || columnIndex >= keys.length) return prevData;
+      const keyToModify = keys[columnIndex];
+      const newData = prevData.map((item) => ({
+        ...item,
+        [keyToModify]:
+          item[keyToModify] === null ? defaultValue : item[keyToModify],
+      }));
+      return newData;
+    });
+    setShowReplaceModal(false);
     setIsOpen(columnIndex, false);
   };
 
@@ -266,12 +294,49 @@ export default function DynamicTable() {
                             <NumberExtractorIcon className="w-7 h-7" />
                             Extract Numbers
                           </button>
+                          {replacingColumn === index && showReplaceModal && (
+                            <Backdrop onClick={handleReplaceNullsModalClose}>
+                              <div
+                                onClick={(e) => e.stopPropagation()}
+                                className="flex flex-col p-5 items-center justify-center w-[70%] h-[10%] max-w-3xl rounded-3xl bg-[#201E1F] border border-gray-200 shadow-md"
+                              >
+                                <div className="flex items-center gap-5">
+                                  <input
+                                    type="text"
+                                    className="bg-gray-900 rounded-2xl pl-3 text-white min-w-15 w-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                    placeholder="Replace Nulls With"
+                                    onBlur={(e) => {
+                                      const defaultValue = e.target.value;
+                                      handleReplaceNulls(index, defaultValue);
+                                      setReplacingColumn(null);
+                                    }}
+                                    onKeyDown={(e) => {
+                                      if (e.key === "Enter") {
+                                        const defaultValue = e.target.value;
+                                        handleReplaceNulls(index, defaultValue);
+                                        e.preventDefault();
+                                        setReplacingColumn(null);
+                                      }
+                                    }}
+                                  />
+                                  <button
+                                    className="ml-2"
+                                    size="icon"
+                                    onClick={() => setReplacingColumn(null)}
+                                  >
+                                    <XIcon className="w-5 h-5" />
+                                  </button>
+                                </div>
+                              </div>
+                            </Backdrop>
+                          )}
                           <button
                             className="flex justify-center items-center gap-4 text-blue-400 hover:text-blue-300 px-4 py-2 text-sm"
                             size="icon"
-                            onClick={() =>
-                              extractNumbersAndReplaceFromColumn(index)
-                            }
+                            onClick={() => {
+                              handleReplaceNullsModal();
+                              setReplacingColumn(index);
+                            }}
                           >
                             <ReplaceDataIcon className="w-7 h-7" />
                             Replace Data
