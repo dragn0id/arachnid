@@ -75,25 +75,27 @@ export default function CustomGradientSelectTargetButton() {
     setIsSelectivelyFiltering(true);
   }
 
-  function ExportAsJson() {
-    // Assuming `data` is your array of objects
+  function ExportAsJson(data, fileName) {
+    // Convert the data to a JSON string
     const jsonData = JSON.stringify(data);
+    // Create a new Blob object using the JSON data
     const blob = new Blob([jsonData], { type: "application/json" });
+    // Create a URL for the Blob object
     const url = URL.createObjectURL(blob);
 
-    // Creating a temporary anchor element to trigger download
+    // Create a temporary anchor element
     const a = document.createElement("a");
-    a.href = url;
-    a.download = "arachnid.json"; // Name of the file to be downloaded
-    document.body.appendChild(a); // Append the anchor to the document
-    a.click(); // Trigger a click on the anchor
+    a.href = url; // Set the href to the Blob URL
+    a.download = fileName || "Arachnid.csv"; // Use the provided fileName or Arachnid to "Arachnid.csv"
+    document.body.appendChild(a); // Append the anchor to the document body
+    a.click(); // Programmatically click the anchor to trigger the download
 
-    // Clean up by removing the anchor and revoking the Blob URL
+    // Clean up by removing the anchor from the document and revoking the Blob URL
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }
 
-  function ExportAsCsv() {
+  function ExportAsCsv(data, fileName) {
     // Assuming `data` is your array of objects and all objects have the same keys
     if (data.length === 0) return; // Check if data is empty
 
@@ -118,7 +120,7 @@ export default function CustomGradientSelectTargetButton() {
     // Creating a temporary anchor element to trigger download
     const a = document.createElement("a");
     a.href = url;
-    a.download = "arachnid.csv"; // Name of the file to be downloaded
+    a.download = fileName || "Arachnid.csv"; // Use the provided fileName or Arachnid to "Arachnid.csv"
     document.body.appendChild(a); // Append the anchor to the document
     a.click(); // Trigger a click on the anchor
 
@@ -146,20 +148,24 @@ export default function CustomGradientSelectTargetButton() {
       exportSectionRef.current?.scrollIntoView({ behavior: "smooth" });
       return;
     }
+    const AnonymizedData = perturbNumericData(data);
+    const NonAnonymizedData = data;
     if (outputFormatCsv) {
-      ExportAsCsv();
+      ExportAsCsv(NonAnonymizedData, "NonAnonymizedData.csv");
+      ExportAsCsv(AnonymizedData, "AnonymizedData.csv");
     }
     if (outputFormatJson) {
-      ExportAsJson();
+      ExportAsJson(NonAnonymizedData, "NonAnonymizedData.json");
+      ExportAsJson(AnonymizedData, "AnonymizedData.json");
     }
   }
 
-  async function handleperturbNumericData(NewData) {
-    console.log("in handleperturbNumericData");
-    console.log("NewData:", NewData);
-    const perturbedData = perturbNumericData(NewData);
-    await setData(perturbedData);
-  }
+  // async function handleperturbNumericData(NewData) {
+  //   console.log("in handleperturbNumericData");
+  //   console.log("NewData:", NewData);
+  //   const perturbedData = perturbNumericData(NewData);
+  //   await setData(perturbedData);
+  // }
 
   const SelectTargetInactiveButton = (
     <button
