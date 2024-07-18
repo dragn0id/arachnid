@@ -8,7 +8,7 @@ import {
   RightArrowIcon,
   SubmitIcon,
 } from "../../../svgFunctions/AllSvgFunctions";
-import DynamicGradientButton from "../../../Buttons/DynamicGradientButton";
+import DynamicGradientButton from "../../Buttons/DynamicGradientButton";
 
 export default function SelectiveFilterScrapedDataDisplay() {
   const { data, setData, setIsSelectivelyFiltering } = useContext(DataContext);
