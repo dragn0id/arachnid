@@ -7,6 +7,7 @@ import {
   LeftArrowIcon,
   RightArrowIcon,
   SubmitIcon,
+  XIcon,
 } from "../../../svgFunctions/AllSvgFunctions";
 import DynamicGradientButton from "../../Buttons/DynamicGradientButton";
 
@@ -26,6 +27,15 @@ export default function SelectiveFilterScrapedDataDisplay() {
     return -1; // Return -1 if no valid index is found
   };
 
+  const keys = data.length > 0 ? Object.keys(data[0]) : [];
+
+  const allChecked = keys.reduce((acc, key) => {
+    acc[key] = true;
+    return acc;
+  }, {});
+
+  const areAllChecked = areObjectsEqual(checkedKeys, allChecked);
+
   useEffect(() => {
     const newIndexes = data[0]
       ? Object.keys(data[0]).reduce((acc, key) => {
@@ -38,6 +48,10 @@ export default function SelectiveFilterScrapedDataDisplay() {
       : {};
     setCurrentIndexes(newIndexes);
   }, [data]); // Dependency array with `data` to trigger effect when `data` changes
+
+  function areObjectsEqual(obj1, obj2) {
+    return JSON.stringify(obj1) === JSON.stringify(obj2);
+  }
 
   function handleCheckboxChange(key) {
     setCheckedKeys((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -75,31 +89,33 @@ export default function SelectiveFilterScrapedDataDisplay() {
   }
 
   function handleSelectAll() {
-    const allChecked = keys.reduce((acc, key) => {
-      acc[key] = true; // Mark each key as true (checked)
-      return acc;
-    }, {});
     setCheckedKeys(allChecked);
   }
 
-  const keys = data.length > 0 ? Object.keys(data[0]) : [];
+  function handleDeselectAll() {
+    setCheckedKeys({});
+  }
 
   return (
     <>
       <div className="flex flex-col p-1 gap-y-4">
-        <h3 className="p-2">Selectively Filter The Output</h3>
         <div className="p-[1px]">
           <div className=" text-sm p-2">
             <p>Select the data you want to keep in the final output.</p>
             <p>Use the arrows to navigate through the data.</p>
           </div>
-          <div className="flex items-center justify-center p-2">
-            <DynamicGradientButton
-              onClick={handleSelectAll}
-              icon={<CheckIcon className="w-5 h-5" />}
+          <div className="flex">
+            <button
+              className="bg-[#D9D9D940] p-2 rounded-md mr-auto flex gap-2 items-center"
+              onClick={areAllChecked ? handleDeselectAll : handleSelectAll}
             >
-              Select All
-            </DynamicGradientButton>
+              {areAllChecked ? (
+                <XIcon className="w-4 h-4" />
+              ) : (
+                <CheckIcon className="w-4 h-4" />
+              )}
+              {areAllChecked ? "Deselect All" : "Select All"}
+            </button>
           </div>
           {keys.map((key) => {
             return (
@@ -124,14 +140,19 @@ export default function SelectiveFilterScrapedDataDisplay() {
                   </p>
                 </div>
                 <div className="flex items-center justify-center gap-2">
-                  <DynamicGradientButton
+                  <button
+                    className="bg-[#D9D9D940] p-2 rounded-md"
                     onClick={() => handleDataChange(key, "prev")}
-                    icon={<LeftArrowIcon className="w-5 h-5" />}
-                  ></DynamicGradientButton>
-                  <DynamicGradientButton
+                  >
+                    <LeftArrowIcon className="w-5 h-5" />
+                  </button>
+
+                  <button
+                    className="bg-[#D9D9D940] p-2 rounded-md"
                     onClick={() => handleDataChange(key, "next")}
-                    icon={<RightArrowIcon className="w-5 h-5" />}
-                  ></DynamicGradientButton>
+                  >
+                    <RightArrowIcon className="w-5 h-5" />
+                  </button>
                 </div>
               </div>
             );
@@ -140,7 +161,7 @@ export default function SelectiveFilterScrapedDataDisplay() {
         <div className="flex items-center justify-center">
           <DynamicGradientButton
             onClick={handleSelectiveFilteringDone}
-            icon={<SubmitIcon className="w-5 h-5" />}
+            icon={<SubmitIcon className="w-5 h-5 my-2" />}
           >
             Filter To Selected Data
           </DynamicGradientButton>

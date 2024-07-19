@@ -12,7 +12,7 @@ function App() {
         <div className="font-poppins flex flex-col w-screen text-white">
           <ArachnidHeader />
           <main className="flex-1 flex flex-col space-y-6 mb-10">
-            <DynamicScrapingSection />
+            {/* <DynamicScrapingSection /> */}
             <CustomizeDataSection />
           </main>
         </div>
