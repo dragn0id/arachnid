@@ -1,13 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Arachnid</title>
-  </head>
-  <body>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval'; object-src 'self'">
+  <link rel="icon" type="image/svg+xml" href="/vite.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arachnid</title>
+  <style>
+    #side-modal {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+      z-index: 10000;
+      overflow-y: auto;
+      width: 400px;
+    }
+
+    .body-arachnid {
+      margin-left: 400px;
+      border: 2px solid red;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="side-modal">
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+  </div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 </html>
