@@ -32,7 +32,7 @@ body {
 
 /* horizonal scrollbar */
 ::-webkit-scrollbar:horizontal {
-  height: 10px;
+  display: none;
 }
 
 .custom-scrollbar::-webkit-scrollbar:horizontal {
