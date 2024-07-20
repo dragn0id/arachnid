@@ -1,6 +1,8 @@
 const arachnidCreateModal = () => {
   // check if modal is created
   if (document.getElementById("arachnidModal")) return;
+  document.body.style.marginRight = "400px";
+  document.body.style.position = "relative";
   const modal = document.createElement("iframe");
   modal.id = "arachnidModal";
   modal.src = chrome.runtime.getURL("index.html");
@@ -9,7 +11,8 @@ const arachnidCreateModal = () => {
       top: 0;
       right: 0;
       height: 100%;
-      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+      border: none;
+      box-shadow: -2px 0 5px rgba(128, 128, 128, 0.3);
       z-index: 10000;
       width: 400px;
     `;
