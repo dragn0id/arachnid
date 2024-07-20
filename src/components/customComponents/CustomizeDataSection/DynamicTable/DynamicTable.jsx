@@ -249,6 +249,9 @@ export default function DynamicTable() {
                               setEditingColumn(null);
                             }
                           }}
+                          onFocus={(e) => {
+                            e.target.select();
+                          }}
                         />
                         <button
                           className="ml-2"
@@ -339,7 +342,7 @@ export default function DynamicTable() {
                             }}
                           >
                             <ReplaceDataIcon className="w-7 h-7" />
-                            Replace Data
+                            Replace Nulls
                           </button>
                         </Dropdown>
                       </div>
