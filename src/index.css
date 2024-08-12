@@ -37,4 +37,5 @@ body {
 
 .custom-scrollbar::-webkit-scrollbar:horizontal {
   height: 7px;
+  display: block;
 }

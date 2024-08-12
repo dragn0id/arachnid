@@ -208,7 +208,7 @@ export default function DynamicTable() {
         </div>
       )}
       <h3 className="p-2">Preview Output</h3>
-      <div className="overflow-auto p-4 [mask-image:linear-gradient(to_right,transparent,white_2%,white_96%,transparent)]">
+      <div className="overflow-auto custom-scrollbar p-4 [mask-image:linear-gradient(to_right,transparent,white_2%,white_96%,transparent)]">
         <table
           className="w-full table-auto rounded-2xl"
           style={{ background: "rgba(255, 255, 255, 0.16)" }}
